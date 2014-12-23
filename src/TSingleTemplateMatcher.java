@@ -1,7 +1,4 @@
-import javafx.util.Pair;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class TSingleTemplateMatcher {
     ArrayList<Integer> result;
@@ -14,11 +11,10 @@ public class TSingleTemplateMatcher {
         }
         result = new ArrayList<Integer>();
         template = new StringBuilder(s);
-        setPref();
     }
 
     ArrayList<Integer> match(ICharStream stream) {
-        this.setPref();
+        setPref();
 
         int index = 0;
         int last = 0;
@@ -31,7 +27,7 @@ public class TSingleTemplateMatcher {
             }
 
             while (last > 0 && s.charAt(last) != next) {
-                last = pref[last];
+                last = pref[last - 1];
             }
 
             if (s.charAt(last) == next) {
@@ -51,8 +47,9 @@ public class TSingleTemplateMatcher {
         pref = new int[s.length()];
 
         for (int i = 1; i < s.length(); ++i) {
+            pref[i] = pref[i - 1];
             while (pref[i] > 0 && s.charAt(pref[i]) != s.charAt(i)) {
-                pref[i] = pref[pref[i]];
+                pref[i] = pref[pref[i] - 1];
             }
 
             if (s.charAt(i) == s.charAt(pref[i])) {

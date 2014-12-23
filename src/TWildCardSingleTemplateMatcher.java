@@ -1,7 +1,6 @@
 import javafx.util.Pair;
-
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class TWildCardSingleTemplateMatcher {
     String template;
@@ -25,39 +24,54 @@ public class TWildCardSingleTemplateMatcher {
                 id[i] = matcher.add(mini[i]);
             }
         }
-
     }
 
     ArrayList<Integer> result = new ArrayList<Integer>();
 
-    ArrayList<Integer> match(ICharStream stream) throws IllegalAccessException {
-        ArrayList<Pair<Integer, Integer>> list = matcher.match(stream);
+    ArrayList<Integer> match(ICharStream stream) {
+        String input = readStream(stream);
+        ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
+        try {
+            list = matcher.match(new ICharStream(new Scanner(input)));
+        } catch (IllegalStateException e) {
+
+        }
+
+        int[][] counter = new int[input.length()][mini.length];
+
         for (Pair<Integer, Integer> pair : list) {
-            if (pair.getValue() == 0) {
-                boolean flag = true;
+            counter[pair.getKey()][pair.getValue()] = 1;
+        }
 
-                int index = pair.getKey();
-
-                for (int i = 1; i < mini.length; ++i) {
-                    if (mini[i].length() == 0) {
-                        ++index;
-                        continue;
-                    }
-
-                    if (!list.contains(new Pair<>(index + 1 + mini[i].length(), id[i]))) {
-                        flag = false;
-                        break;
-                    }
-
-                    index += 1 + mini[i].length();
+        for (int i = 0; i <= input.length() - template.length(); ++i) {
+            int index = i - 1;
+            boolean flag = true;
+            for (int k = 0; k < mini.length; ++k) {
+                if (mini[k].length() == 0) {
+                    ++index;
+                    continue;
                 }
-
-                if (flag) {
-                    result.add(index);
+                index += mini[k].length();
+                if (counter[index][id[k]] != 1) {
+                    flag = false;
+                    break;
                 }
+                ++index;
+            }
+
+            if (flag) {
+                result.add(i + template.length() - 1);
             }
         }
 
         return result;
+    }
+
+    String readStream(ICharStream stream) {
+        StringBuilder builder = new StringBuilder();
+        while (!stream.isEmpty()) {
+            builder.append(stream.getChar());
+        }
+        return builder.toString();
     }
 }

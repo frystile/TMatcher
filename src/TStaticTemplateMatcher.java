@@ -1,7 +1,5 @@
 import javafx.util.Pair;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class TStaticTemplateMatcher {
     ArrayList<String> templates;
@@ -9,7 +7,7 @@ public class TStaticTemplateMatcher {
 
     TStaticTemplateMatcher() {
         templates = new ArrayList<String>();
-        bor = new Bor();
+
     }
 
     int add(String template) {
@@ -21,16 +19,23 @@ public class TStaticTemplateMatcher {
         return templates.size() - 1;
     }
 
-    ArrayList<Pair<Integer, Integer>> match(ICharStream stream) throws IllegalStateException, IllegalAccessException {
+    ArrayList<Pair<Integer, Integer>> match(ICharStream stream) throws IllegalStateException {
         if (templates.size() == 0) {
             throw new IllegalStateException("There are no templates");
         }
+        bor = new Bor();
 
         for (String template : templates) {
             bor.addString(template);
         }
 
-        return bor.match(stream);
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+        bor.getSuffLink();
+        while (!stream.isEmpty()) {
+            char c = stream.getChar();
+            result.addAll(bor.match(c));
+        }
+        return result;
     }
 
     boolean contains(String s) {

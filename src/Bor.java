@@ -1,17 +1,20 @@
 import javafx.util.Pair;
-
 import java.util.ArrayList;
 
 public class Bor {
     private ArrayList<Node> nodes;
     private int stringCount;
     private ArrayList<Pair<Integer, Integer>> matchResult;
+    private int current;
+    private int streamLength;
 
     Bor() {
         nodes = new ArrayList<Node>();
         nodes.add(new Node(-1, 0, '$', -1));
         stringCount = 0;
         matchResult = null;
+        streamLength = 0;
+        current = 0;
     }
 
     void addString(String template) throws IllegalArgumentException {
@@ -36,15 +39,15 @@ public class Bor {
         ++stringCount;
     }
 
-    void print() {
-        for (int i = 0; i < nodes.size(); ++i) {
-            System.out.println(i + " - parent = " + nodes.get(i).parentNode + " value = " + nodes.get(i).value + " flag = "
-                    + nodes.get(i).flag + " sufflink = " + nodes.get(i).suffLink + " NextString = " + nodes.get(i).nextString);
-            for (int id : nodes.get(i).childs) {
-                System.out.println(id + " ");
-            }
-        }
-    }
+//    void print() {
+//        for (int i = 0; i < nodes.size(); ++i) {
+//            System.out.println(i + " - parent = " + nodes.get(i).parentNode + " value = " + nodes.get(i).value + " flag = "
+//                    + nodes.get(i).flag + " sufflink = " + nodes.get(i).suffLink + " NextString = " + nodes.get(i).nextString);
+//            for (int id : nodes.get(i).childs) {
+//                System.out.println(id + " ");
+//            }
+//        }
+//    }
 
     void getSuffLink() {
         ArrayList<Integer> sequence = new ArrayList<>();
@@ -83,13 +86,21 @@ public class Bor {
     }
 
     int move(int index, int symbol) {
+        if (symbol < 32 || symbol > 255) {
+            throw new IllegalArgumentException("Illegal symbol");
+        }
+
         Node node = nodes.get(index);
 
         if (node.nextNode[symbol] == 0) {
             if (index == 0) {
                 return 0;
             } else {
-                return move(node.suffLink, symbol);
+                if (node.suffLink == -1) {
+                    return move(0, symbol);
+                } else {
+                    return move(node.suffLink, symbol);
+                }
             }
         } else {
             return node.nextNode[symbol];
@@ -98,28 +109,22 @@ public class Bor {
 
 
 
-    ArrayList<Pair<Integer, Integer>> match(ICharStream stream) throws IllegalAccessException {
-        if (matchResult != null) {
-            throw new IllegalAccessException("Result has been counted");
+    ArrayList<Pair<Integer, Integer>> match(char c) {
+        if (c < 32 || c > 255) {
+            throw new IllegalArgumentException("Illegal symbol");
         }
-        matchResult = new ArrayList<>();
-        getSuffLink();
 
+        current = move(current, c);
+        check(current, streamLength);
+        ++streamLength;
 
-        int current = 0;
-        int index = 0;
-
-        while (!stream.isEmpty()) {
-            char c = stream.getChar();
-            current = move(current, c);
-            check(current, index);
-            ++index;
-        }
         return matchResult;
     }
 
     void check(int index, int number) {
         Node tmp = nodes.get(index);
+        matchResult = new ArrayList<>();
+
         if (tmp.flag != -1) {
             matchResult.add(new Pair<Integer, Integer>(number, tmp.flag));
         }
