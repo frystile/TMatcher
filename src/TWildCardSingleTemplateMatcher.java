@@ -1,5 +1,6 @@
 import javafx.util.Pair;
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 import java.util.Scanner;
 
 public class TWildCardSingleTemplateMatcher {
@@ -8,8 +9,21 @@ public class TWildCardSingleTemplateMatcher {
     int[] id;
     TStaticTemplateMatcher matcher;
 
+    TWildCardSingleTemplateMatcher() {
+        template = null;
+    }
+
     TWildCardSingleTemplateMatcher(String s) {
-        template = s;
+        set(s);
+    }
+
+    void set(String str) {
+        for (int i = 0; i < str.length(); ++i) {
+            if (str.charAt(i) < 32 || str.charAt(i) > 255)
+                throw new IllegalArgumentException("Illegal symbol");
+        }
+
+        template = str;
         mini = template.split("\\?");
         matcher = new TStaticTemplateMatcher();
 
@@ -29,6 +43,9 @@ public class TWildCardSingleTemplateMatcher {
     ArrayList<Integer> result = new ArrayList<Integer>();
 
     ArrayList<Integer> match(ICharStream stream) {
+        if (template == null) {
+            throw new IllegalArgumentException("There is no template");
+        }
         String input = readStream(stream);
         ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
         try {
@@ -67,7 +84,7 @@ public class TWildCardSingleTemplateMatcher {
         return result;
     }
 
-    String readStream(ICharStream stream) {
+    private String readStream(ICharStream stream) {
         StringBuilder builder = new StringBuilder();
         while (!stream.isEmpty()) {
             builder.append(stream.getChar());

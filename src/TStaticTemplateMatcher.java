@@ -2,8 +2,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 
 public class TStaticTemplateMatcher {
-    ArrayList<String> templates;
-    Bor bor;
+    private ArrayList<String> templates;
 
     TStaticTemplateMatcher() {
         templates = new ArrayList<String>();
@@ -23,7 +22,7 @@ public class TStaticTemplateMatcher {
         if (templates.size() == 0) {
             throw new IllegalStateException("There are no templates");
         }
-        bor = new Bor();
+        Bor bor = new Bor();
 
         for (String template : templates) {
             bor.addString(template);

@@ -39,15 +39,15 @@ public class Bor {
         ++stringCount;
     }
 
-//    void print() {
-//        for (int i = 0; i < nodes.size(); ++i) {
-//            System.out.println(i + " - parent = " + nodes.get(i).parentNode + " value = " + nodes.get(i).value + " flag = "
-//                    + nodes.get(i).flag + " sufflink = " + nodes.get(i).suffLink + " NextString = " + nodes.get(i).nextString);
-//            for (int id : nodes.get(i).childs) {
-//                System.out.println(id + " ");
-//            }
-//        }
-//    }
+    void print() {
+        for (int i = 0; i < nodes.size(); ++i) {
+            System.out.println(i + " - parent = " + nodes.get(i).parentNode + " value = " + nodes.get(i).value + " flag = "
+                    + nodes.get(i).flag + " sufflink = " + nodes.get(i).suffLink + " NextString = " + nodes.get(i).nextString);
+            for (int id : nodes.get(i).childs) {
+                System.out.println(id + " ");
+            }
+        }
+    }
 
     void getSuffLink() {
         ArrayList<Integer> sequence = new ArrayList<>();

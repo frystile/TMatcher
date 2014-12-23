@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class T2DSingleTemplateMatcher {
-    ArrayList<String> matrix;
-    int mSize;
+    private ArrayList<String> matrix;
+    private int mSize;
 
     void set(ArrayList<String> m) {
         if (m == null) {

@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class TSingleTemplateMatcher {
-    ArrayList<Integer> result;
-    StringBuilder template;
-    int[] pref;
+    private ArrayList<Integer> result;
+    private StringBuilder template;
+    private int[] pref;
 
     TSingleTemplateMatcher(String s) {
         if (s == null) {
@@ -42,7 +42,7 @@ public class TSingleTemplateMatcher {
         return result;
     }
 
-    void setPref() {
+    private void setPref() {
         String s = template.toString() + (char) 1;
         pref = new int[s.length()];
 

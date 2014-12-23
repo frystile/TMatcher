@@ -25,7 +25,8 @@ public class TDynamicTemplateMatcher {
 
         Bor tmp = new Bor();
         ArrayList<Pair<String, Integer>> addedList = new ArrayList<>();
-        addedList.add(new Pair<>(template, count));
+
+        addedList.add(new Pair<>(template, strings.size() - 1));
 
         int num = 0;
         while (num < count && !isEmpty.get(num)) {
@@ -54,6 +55,16 @@ public class TDynamicTemplateMatcher {
     }
 
     ArrayList<Pair<Integer, Integer>> match(ICharStream stream) {
+//        for (int i = 0; i < count; ++i) {
+//            if (!isEmpty.get(i)) {
+//                bors.get(i).print();
+//            }
+//
+//            for (int k = 0; k < index.get(i).size(); ++k) {
+//                System.out.println(index.get(i).get(k).getKey() + " -- " + index.get(i).get(k).getValue());
+//            }
+//        }
+
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
         char c;
         while (!stream.isEmpty()) {

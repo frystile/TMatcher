@@ -2,8 +2,8 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 
 public class TNaiveTemplateMatcher {
-    ArrayList<String> strings;
-    int maxLength;
+    private ArrayList<String> strings;
+    private int maxLength;
 
     TNaiveTemplateMatcher() {
         strings = new ArrayList<>();
