@@ -56,7 +56,7 @@ public class T2DSingleTemplateMatcher {
                 result.get(i).add(-1);
             }
 
-            for (Pair<Integer, Integer> pair : matcher.match(new ICharStream(new Scanner(matrix.get(i))))) {
+            for (Pair<Integer, Integer> pair : matcher.match(new ICharStream(matrix.get(i)))) {
                 result.get(i).set(pair.getKey(), pair.getValue());
             }
         }

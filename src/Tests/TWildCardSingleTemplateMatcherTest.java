@@ -28,7 +28,6 @@ public class TWildCardSingleTemplateMatcherTest {
 
         for (int h = 0; h < 1000; ++h) {
             test = new TWildCardSingleTemplateMatcher();
-//            int templateSize = random.nextInt() + 5;
             int templateSize = 5;
             StringBuilder template = new StringBuilder();
             for (int i = 0; i < templateSize; ++i) {

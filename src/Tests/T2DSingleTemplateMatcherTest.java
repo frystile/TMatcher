@@ -79,6 +79,7 @@ public class T2DSingleTemplateMatcherTest {
         return result;
     }
 
+
     @Test(expected = NullPointerException.class)
     public void testSetNull() throws Exception {
         test = new T2DSingleTemplateMatcher();

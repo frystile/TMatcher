@@ -1,19 +1,22 @@
 import java.util.Scanner;
 
 public class ICharStream {
-    Scanner scanner;
+    private String stream;
+    private int count;
 
-    ICharStream(Scanner sc) {
-        scanner = sc;
+    ICharStream(String s) {
+        stream = s;
+        count = 0;
     }
 
     char getChar() {
-        return scanner.findInLine(".").charAt(0);
+        ++count;
+        return stream.charAt(count - 1);
     }
     //считывает строго 1 символ
 
     boolean isEmpty() {
-        return !scanner.hasNext();
+        return count == stream.length();
     }
     //проверяет можно ли считать хотя бы 1 символ
 }

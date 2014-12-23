@@ -49,7 +49,7 @@ public class TWildCardSingleTemplateMatcher {
         String input = readStream(stream);
         ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
         try {
-            list = matcher.match(new ICharStream(new Scanner(input)));
+            list = matcher.match(new ICharStream(input));
         } catch (IllegalStateException e) {
 
         }

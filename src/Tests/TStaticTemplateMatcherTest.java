@@ -51,7 +51,7 @@ public class TStaticTemplateMatcherTest {
         }
 
         StringBuilder stream = new StringBuilder();
-        int steamSize = random.nextInt(10000) + 1;
+        int steamSize = 100000;
         for (int k = 0; k < steamSize; ++k) {
             if (random.nextBoolean()) {
                 stream.append('a');
@@ -59,11 +59,79 @@ public class TStaticTemplateMatcherTest {
                 stream.append('b');
             }
         }
-        ArrayList<Pair<Integer, Integer>> naiveAns = naive.match(new ICharStream(new Scanner(stream.toString())));
-        ArrayList<Pair<Integer, Integer>> staticAns = test.match(new ICharStream(new Scanner(stream.toString())));
+        ArrayList<Pair<Integer, Integer>> naiveAns = naive.match(new ICharStream(stream.toString()));
+        ArrayList<Pair<Integer, Integer>> staticAns = test.match(new ICharStream(stream.toString()));
         for (Pair<Integer, Integer> pair : staticAns) {
             Assert.assertTrue(naiveAns.contains(pair));
         }
         Assert.assertEquals(staticAns.size(), naiveAns.size());
     }
+
+    @Test
+    public void testBigValue() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 1000000; ++i) {
+            builder.append('a');
+        }
+
+        test.add("a");
+        test.add("aa");
+        test.add("aaa");
+        //1000000 + 1000000 - 1 + 1000000 - 2
+        ArrayList<Pair<Integer, Integer>> ans = test.match(new ICharStream(builder.toString()));
+        Assert.assertEquals(ans.size(), 3000000 - 3);
+    }
+
+    @Test
+    public void testSingleBitValue() {
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 10000000; ++i) {
+            if (random.nextBoolean()) {
+                builder.append('a');
+            } else {
+                builder.append('b');
+            }
+        }
+
+        test.add("ab");
+        TSingleTemplateMatcher tmp = new TSingleTemplateMatcher("ab");
+        Assert.assertEquals(tmp.match(new ICharStream(builder.toString())).size(), test.match(new ICharStream(builder.toString())).size());
+    }
+
+    @Test
+    public void testBigTemplate() {
+        StringBuilder template = new StringBuilder();
+        for (int i = 0; i < 100000; ++i) {
+            template.append('a');
+        }
+
+        StringBuilder stream = new StringBuilder();
+        for (int i = 0; i < 10000000; ++i) {
+            stream.append('a');
+        }
+        test.add(template.toString());
+
+
+        Assert.assertEquals(test.match(new ICharStream(stream.toString())).size(), 10000000 - 100000 + 1);
+    }
+
+    @Test
+    public void testManyTemplates() {
+        StringBuilder template = new StringBuilder();
+        for (int i = 0; i < 100; ++i) {
+            template.append('a');
+            test.add(template.toString());
+        }
+
+        int count = 0;
+        StringBuilder stream = new StringBuilder();
+        for (int i = 0; i < 100; ++i) {
+            stream.append('a');
+            count += 10000 - stream.length() + 1;
+        }
+        test.match(new ICharStream(stream.toString()));
+    }
+
+
 }
